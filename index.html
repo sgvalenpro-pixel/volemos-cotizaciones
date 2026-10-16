@@ -70,6 +70,7 @@
   .btn-ghost{background:var(--suave);color:var(--tinta-2);border:1px solid var(--linea)}
   .btn-ghost:hover{background:#eceff2}
   .hint{font-size:12px;color:#8a98a0;margin-top:12px}
+  .fecha-txt{font-size:12px;color:#8a98a0;font-variant-numeric:tabular-nums}
   /* config */
   details.cfg{margin-top:18px;border-top:1px dashed var(--linea);padding-top:14px}
   details.cfg summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--tinta-2);text-transform:uppercase;letter-spacing:.5px}
@@ -119,6 +120,7 @@
         <div class="field">
           <label for="fecha">Fecha</label>
           <input type="date" id="fecha">
+          <span id="fechaTxt" class="fecha-txt"></span>
         </div>
         <div class="field">
           <label for="cliente">Cliente / Dirigido a <span style="font-weight:400;color:#9aa7ae">(opcional)</span></label>
@@ -267,7 +269,9 @@ function renderCodigo(){
   const iso = $('fecha').value || hoyISO();
   $('num').textContent = pad(activeNum);
   $('cod').textContent = codigoDe(activeNum, iso);
+  renderFecha();
 }
+function renderFecha(){ $('fechaTxt').textContent = fmtFecha($('fecha').value); }
 function renderContador(){ $('cc').textContent = $('contenido').value.length.toLocaleString('es-CO'); }
 
 function renderLista(){
