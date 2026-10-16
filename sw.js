@@ -1,7 +1,7 @@
 /* Service Worker — Cotizador Volemos
    Estrategia: cache-first para el app shell (funciona offline).
    Sube la versión (CACHE) cuando cambies archivos para forzar actualización. */
-const CACHE = 'cotizador-volemos-v2';
+const CACHE = 'cotizador-volemos-v3';
 const ASSETS = [
   './',
   './index.html',

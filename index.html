@@ -153,16 +153,12 @@
         <summary>⚙️ Configuración del consecutivo</summary>
         <div class="cfg-grid">
           <div class="field" style="min-width:120px">
-            <label for="cfgPref">Prefijo</label>
-            <input type="text" id="cfgPref" maxlength="16">
-          </div>
-          <div class="field" style="min-width:120px">
             <label for="cfgNext">Próximo número</label>
             <input type="number" id="cfgNext" min="1" step="1">
           </div>
           <button class="btn-ghost" onclick="guardarConfig()">Aplicar</button>
         </div>
-        <p class="hint">Formato: <code>PREFIJO-AÑO-0000</code>. El año se toma de la fecha de cada cotización.</p>
+        <p class="hint">Formato: <code>COT-VOL-0000</code> (consecutivo).</p>
       </details>
     </section>
 
@@ -260,7 +256,8 @@ function renderFotos(){
 function hoyISO(){ const d=new Date(); const o=d.getTimezoneOffset(); return new Date(d-o*60000).toISOString().slice(0,10); }
 function fmtFecha(iso){ if(!iso) return '—'; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
 function pad(n){ return String(n).padStart(4,'0'); }
-function codigoDe(num, iso){ const y=(iso||hoyISO()).slice(0,4); return `${cfg.prefijo}-${y}-${pad(num)}`; }
+const PREFIJO='COT-VOL';
+function codigoDe(num){ return `${PREFIJO}-${pad(num)}`; }
 
 function persistCfg(){ store.set(K_CFG, JSON.stringify(cfg)); }
 function persistList(){ store.set(K_LIST, JSON.stringify(lista)); }
@@ -488,9 +485,9 @@ function generarPDF(){
 function pdfDe(id){ const r=lista.find(x=>x.id===id); if(r) exportarPDF(r); }
 
 /* ---------- config ---------- */
-function refrescarCfgInputs(){ $('cfgPref').value=cfg.prefijo; $('cfgNext').value=(useFB?cfg.next:cfg.next); }
+function refrescarCfgInputs(){ $('cfgNext').value=(useFB?cfg.next:cfg.next); }
 function guardarConfig(){
-  const p=$('cfgPref').value.trim().replace(/\s+/g,'').toUpperCase()||'COT-VOL';
+  const p=PREFIJO;
   const n=Math.max(1, parseInt($('cfgNext').value,10)||1);
   if(useFB){
     Promise.all([ db.ref(FB_PATHS.prefijo).set(p), db.ref(FB_PATHS.counter).set(n) ])
